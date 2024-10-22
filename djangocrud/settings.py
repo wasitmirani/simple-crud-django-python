@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+from django.shortcuts import render
+
+from books.models import Book
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -52,12 +56,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'djangocrud.urls'
+def book_list(request):
+    print("Attempting to render the book_list template.")
+    books = Book.objects.all()
+    return render(request, 'books/book_list.html', {'books': books})
+
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [],  # You can add additional directories here if needed
+        'APP_DIRS': True,  # Ensure this is set to True
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -77,12 +86,14 @@ WSGI_APPLICATION = 'djangocrud.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bookcrud_db',
+        'USER': 'postgres',  # replace with your PostgreSQL username
+        'PASSWORD': '',  # replace with your PostgreSQL password
+        'HOST': 'localhost',  # or the host of your database server
+        'PORT': '5432',  # default PostgreSQL port
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
